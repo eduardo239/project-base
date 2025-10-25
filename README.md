@@ -84,7 +84,7 @@ terraform apply
 terraform output
 ```
 
-### 4. Deploy via CI/CD
+### 4. Deploy via CI/CD.
 
 ```bash
 # Push para main dispara o CI/CD
