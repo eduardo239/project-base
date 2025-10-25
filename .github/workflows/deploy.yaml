@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        environment: [dev, staging, prod]
+        environment: [dev, prod]
       max-parallel: 1
 
     environment:

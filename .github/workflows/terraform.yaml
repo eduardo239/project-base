@@ -24,7 +24,7 @@ jobs:
 
     strategy:
       matrix:
-        environment: [dev, staging, prod]
+        environment: [dev, prod]
 
     steps:
       - name: Checkout
@@ -74,7 +74,7 @@ jobs:
 
     strategy:
       matrix:
-        environment: [dev, staging, prod]
+        environment: [dev, prod]
       max-parallel: 1 # Deploy um ambiente por vez
 
     environment:
