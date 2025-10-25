@@ -3,39 +3,42 @@
 ```
 project-base/
 ├── .github/
-│   └── workflows/
-│       ├── terraform.yml    # CI/CD para infraestrutura
-│       └── deploy.yml       # CI/CD para aplicação
-├── terraform/
-│   ├── environments/
-│   │   ├── dev/
-│   │   │   ├── main.tf
-│   │   │   ├── terraform.tfvars
-│   │   │   └── backend.tf
-│   │   └── prod/
-│   │       ├── main.tf
-│   │       ├── terraform.tfvars
-│   │       └── backend.tf
-│   ├── modules/
-│   │   ├── cloud-run/
-│   │   │   ├── main.tf
-│   │   │   ├── variables.tf
-│   │   │   └── outputs.tf
-│   │   ├── artifact-registry/
-│   │   │   ├── main.tf
-│   │   │   ├── variables.tf
-│   │   │   └── outputs.tf
-│   │   ├── iam/
-│   │   │   ├── main.tf
-│   │   │   ├── variables.tf
-│   │   │   └── outputs.tf
-│   │   └── networking/
-│   │       ├── main.tf
-│   │       ├── variables.tf
-│   │       └── outputs.tf
-│   └── global/
-│       ├── main.tf          # Recursos globais (projeto, APIs)
-│       └── backend.tf
+│ └── workflows/
+│ ├── terraform.yml # CI/CD para infraestrutura
+│ └── deploy.yml # CI/CD para aplicação
+│ ├── environments/
+│ │ ├── dev/
+│ │ │ ├── main.tf
+│ │ │ ├── terraform.tfvars
+│ │ │ └── backend.tf
+│ │ ├── staging/
+│ │ │ ├── main.tf
+│ │ │ ├── terraform.tfvars
+│ │ │ └── backend.tf
+│ │ └── prod/
+│ │ ├── main.tf
+│ │ ├── terraform.tfvars
+│ │ └── backend.tf
+│ ├── modules/
+│ │ ├── cloud-run/
+│ │ │ ├── main.tf
+│ │ │ ├── variables.tf
+│ │ │ └── outputs.tf
+│ │ ├── artifact-registry/
+│ │ │ ├── main.tf
+│ │ │ ├── variables.tf
+│ │ │ └── outputs.tf
+│ │ ├── iam/
+│ │ │ ├── main.tf
+│ │ │ ├── variables.tf
+│ │ │ └── outputs.tf
+│ │ └── networking/
+│ │ ├── main.tf
+│ │ ├── variables.tf
+│ │ └── outputs.tf
+│ └── global/
+│ ├── main.tf # Recursos globais (projeto, APIs)
+│ └── backend.tf
 ├── src/
 │   ├── main.py
 │   └── requirements.txt
@@ -78,6 +81,7 @@ terraform apply
 # Salvar outputs importantes
 terraform output
 ```
+
 
 ### 3. Deploy via CI/CD
 
