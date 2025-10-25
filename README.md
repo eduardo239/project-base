@@ -1,4 +1,4 @@
-meu-projeto/
+project-base/
 ├── .github/
 │ └── workflows/
 │ ├── terraform.yml # CI/CD para infraestrutura

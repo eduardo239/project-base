@@ -11,7 +11,7 @@ on:
 
 env:
   PROJECT_ID: seu-project-id
-  SERVICE_NAME: meu-projeto
+  SERVICE_NAME: project-base
   REGION: us-central1
 
 jobs:
