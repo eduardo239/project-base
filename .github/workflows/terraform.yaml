@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
     paths:
       - 'terraform/**'
   pull_request:
@@ -20,7 +21,7 @@ jobs:
 
     strategy:
       matrix:
-        environment: [dev, staging, prod]
+        environment: ${{ github.ref == 'refs/heads/main' && fromJSON('["dev", "staging", "prod"]') || fromJSON('["dev"]') }}
 
     steps:
       - name: Checkout
