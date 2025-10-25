@@ -9,10 +9,6 @@ meu-projeto/
 │ │ │ ├── main.tf
 │ │ │ ├── terraform.tfvars
 │ │ │ └── backend.tf
-│ │ ├── staging/
-│ │ │ ├── main.tf
-│ │ │ ├── terraform.tfvars
-│ │ │ └── backend.tf
 │ │ └── prod/
 │ │ ├── main.tf
 │ │ ├── terraform.tfvars
@@ -80,8 +76,8 @@ terraform apply
 
 terraform output
 
-
 ### 4. Deploy via CI/CD.
+
 =======
 
 # Push para main dispara o CI/CD
