@@ -3,7 +3,6 @@ meu-projeto/
 │ └── workflows/
 │ ├── terraform.yml # CI/CD para infraestrutura
 │ └── deploy.yml # CI/CD para aplicação
-├── terraform/
 │ ├── environments/
 │ │ ├── dev/
 │ │ │ ├── main.tf
@@ -80,8 +79,8 @@ terraform apply
 
 terraform output
 
-
 ### 4. Deploy via CI/CD.
+
 =======
 
 # Push para main dispara o CI/CD
