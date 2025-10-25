@@ -13,6 +13,7 @@ on:
 
 env:
   TF_VERSION: '1.5.0'
+  GOOGLE_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
 
 jobs:
   terraform-plan:
@@ -36,6 +37,10 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Create terraform.tfvars.json
+        working-directory: terraform/environments/${{ matrix.environment }}
+        run: echo '${{ secrets.TFVARS_JSON }}' > terraform.tfvars.json
 
       - name: Terraform Init
         working-directory: terraform/environments/${{ matrix.environment }}
@@ -86,6 +91,10 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Create terraform.tfvars.json
+        working-directory: terraform/environments/${{ matrix.environment }}
+        run: echo '${{ secrets.TFVARS_JSON }}' > terraform.tfvars.json
 
       - name: Terraform Init
         working-directory: terraform/environments/${{ matrix.environment }}
