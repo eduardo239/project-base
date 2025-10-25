@@ -45,7 +45,7 @@ module "iam" {
   
   project_id           = var.project_id
   service_account_name = "${var.service_name}-${var.environment}-sa"
-  create_key           = false # Usar Workload Identity em vez de chaves
+  # create_key           = false # Usar Workload Identity em vez de chaves
   
   depends_on = [google_project_service.required_apis]
 }
