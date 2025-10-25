@@ -33,8 +33,8 @@ resource "google_service_account_iam_member" "service_account_user" {
   member             = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
-# Criar chave (usar com cuidado - melhor usar Workload Identity)
-resource "google_service_account_key" "github_actions_key" {
-  count              = var.create_key ? 1 : 0
-  service_account_id = google_service_account.github_actions.name
-}
+# # Criar chave (usar com cuidado - melhor usar Workload Identity)
+# resource "google_service_account_key" "github_actions_key" {
+#   count              = var.create_key ? 1 : 0
+#   service_account_id = google_service_account.github_actions.name
+# }
