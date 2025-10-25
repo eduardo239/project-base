@@ -1,7 +1,7 @@
 project_id      = "seu-project-id"
 region          = "us-central1"
 environment     = "prod"
-service_name    = "meu-projeto"
+service_name    = "project-base"
 repository_id = "meu-repo"
 
 cpu_limit    = "2"

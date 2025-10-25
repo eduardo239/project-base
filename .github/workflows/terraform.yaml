@@ -21,7 +21,7 @@ jobs:
 
     strategy:
       matrix:
-        environment: ${{ github.ref == 'refs/heads/main' && fromJSON('["dev", "staging", "prod"]') || fromJSON('["dev"]') }}
+        environment: [dev, staging, prod]
 
     steps:
       - name: Checkout
