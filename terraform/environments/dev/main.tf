@@ -56,7 +56,8 @@ module "cloud_run" {
 
   service_name    = var.service_name
   region          = var.region
-  container_image = "${module.artifact_registry.repository_url}/${var.service_name}:latest"
+  # container_image = "${module.artifact_registry.repository_url}/${var.service_name}:latest"
+  container_image = "us-central1-docker.pkg.dev/proj-b-475817/meu-repo/app1:latest"
 
   cpu_limit     = var.cpu_limit
   memory_limit  = var.memory_limit
