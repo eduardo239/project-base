@@ -1,94 +1,91 @@
-```pre
-project-base/
+meu-projeto/
 ├── .github/
-│   └── workflows/
-│       ├── terraform.yml      # CI/CD para infraestrutura
-│       └── deploy.yml         # CI/CD para aplicação
+│ └── workflows/
+│ ├── terraform.yml # CI/CD para infraestrutura
+│ └── deploy.yml # CI/CD para aplicação
 ├── terraform/
-│   ├── environments/
-│   │   ├── dev/
-│   │   │   ├── main.tf
-│   │   │   ├── terraform.tfvars
-│   │   │   └── backend.tf
-│   │   ├── staging/
-│   │   │   ├── main.tf
-│   │   │   ├── terraform.tfvars
-│   │   │   └── backend.tf
-│   │   └── prod/
-│   │       ├── main.tf
-│   │       ├── terraform.tfvars
-│   │       └── backend.tf
-│   ├── modules/
-│   │   ├── cloud-run/
-│   │   │   ├── main.tf
-│   │   │   ├── variables.tf
-│   │   │   └── outputs.tf
-│   │   ├── artifact-registry/
-│   │   │   ├── main.tf
-│   │   │   ├── variables.tf
-│   │   │   └── outputs.tf
-│   │   ├── iam/
-│   │   │   ├── main.tf
-│   │   │   ├── variables.tf
-│   │   │   └── outputs.tf
-│   │   └── networking/
-│   │       ├── main.tf
-│   │       ├── variables.tf
-│   │       └── outputs.tf
-│   └── global/
-│       ├── main.tf            # Recursos globais (projeto, APIs)
-│       └── backend.tf
+│ ├── environments/
+│ │ ├── dev/
+│ │ │ ├── main.tf
+│ │ │ ├── terraform.tfvars
+│ │ │ └── backend.tf
+│ │ ├── staging/
+│ │ │ ├── main.tf
+│ │ │ ├── terraform.tfvars
+│ │ │ └── backend.tf
+│ │ └── prod/
+│ │ ├── main.tf
+│ │ ├── terraform.tfvars
+│ │ └── backend.tf
+│ ├── modules/
+│ │ ├── cloud-run/
+│ │ │ ├── main.tf
+│ │ │ ├── variables.tf
+│ │ │ └── outputs.tf
+│ │ ├── artifact-registry/
+│ │ │ ├── main.tf
+│ │ │ ├── variables.tf
+│ │ │ └── outputs.tf
+│ │ ├── iam/
+│ │ │ ├── main.tf
+│ │ │ ├── variables.tf
+│ │ │ └── outputs.tf
+│ │ └── networking/
+│ │ ├── main.tf
+│ │ ├── variables.tf
+│ │ └── outputs.tf
+│ └── global/
+│ ├── main.tf # Recursos globais (projeto, APIs)
+│ └── backend.tf
 ├── src/
-│   ├── main.py
-│   └── requirements.txt
+│ ├── main.py
+│ └── requirements.txt
 ├── tests/
-│   └── test_main.py
+│ └── test_main.py
 ├── .dockerignore
 ├── .gitignore
 ├── Dockerfile
 └── README.md
-```
 
-## Setup Instructions
+1.
 
-### 1. Criar bucket para estado do Terraform
+# Criar bucket para estado do Terraform
 
-```bash
 gsutil mb -p SEU-PROJECT-ID gs://SEU-PROJECT-ID-terraform-state
 gsutil versioning set on gs://SEU-PROJECT-ID-terraform-state
-```
 
-### 2. Configurar ambiente de produção
-
-```bash
 # Ir para ambiente de produção
+
 cd terraform/environments/prod
 
 # Editar terraform.tfvars com seus valores
+
 nano terraform.tfvars
-```
 
-### 3. Aplicar Terraform
+2.
 
-```bash
 # Inicializar
+
 terraform init
 
 # Ver o que será criado
+
 terraform plan
 
 # Aplicar
+
 terraform apply
 
 # Salvar outputs importantes
+
 terraform output
-```
+
 
 ### 4. Deploy via CI/CD.
+=======
 
-```bash
 # Push para main dispara o CI/CD
+
 git add .
 git commit -m "Initial setup with Terraform"
 git push origin main
-```

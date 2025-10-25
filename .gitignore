@@ -50,26 +50,3 @@ coverage/
 # Temporary folders
 tmp/
 temp/
-
-# Terraform
-*.tfstate
-*.tfstate.*
-*.tfvars
-*.tfvars.json
-.terraform/
-.terraform.lock.hcl
-crash.log
-crash.*.log
-override.tf
-override.tf.json
-*_override.tf
-*_override.tf.json
-.terraformrc
-terraform.rc
-
-# Terraform plan files
-*.tfplan
-tfplan
-
-
-*.example
