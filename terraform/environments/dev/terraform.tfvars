@@ -1,14 +1,14 @@
 project_id      = "seu-project-id"
 region          = "us-central1"
 environment     = "dev"
-service_name    = "project-base"
+service_name    = "service_name"
 repository_id = "meu-repo"
 
-cpu_limit    = "2"
-memory_limit = "1Gi"
+cpu_limit    = "1000m"
+memory_limit = "512Mi"
 
 min_instances = 1
-max_instances = 100
+max_instances = 2
 
 environment_variables = {
   ENV = "development"
