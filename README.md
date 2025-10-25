@@ -80,7 +80,9 @@ terraform apply
 
 terraform output
 
-3.
+
+### 4. Deploy via CI/CD.
+=======
 
 # Push para main dispara o CI/CD
 
