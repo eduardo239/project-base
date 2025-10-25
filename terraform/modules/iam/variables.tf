@@ -9,8 +9,8 @@ variable "service_account_name" {
   default     = "github-actions"
 }
 
-variable "create_key" {
-  description = "Create service account key"
-  type        = bool
-  default     = false
-}
+# variable "create_key" {
+#   description = "Create service account key"
+#   type        = bool
+#   default     = false
+# }

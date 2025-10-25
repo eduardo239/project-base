@@ -8,5 +8,5 @@ resource "google_artifact_registry_repository" "docker_repo" {
     immutable_tags = var.immutable_tags
   }
 
-  depends_on = var.depends_on
+
 }

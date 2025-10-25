@@ -1,7 +1,7 @@
-project_id      = "seu-project-id"
-region          = "us-central1"
-environment     = "dev"
-service_name    = "meu-projeto"
+project_id    = "proj-b-475817"
+region        = "us-central1"
+environment   = "dev"
+service_name  = "project-base"
 repository_id = "meu-repo"
 
 cpu_limit    = "2"
@@ -11,7 +11,7 @@ min_instances = 1
 max_instances = 100
 
 environment_variables = {
-  ENV = "development"
+  ENV       = "development"
   LOG_LEVEL = "info"
 }
 
