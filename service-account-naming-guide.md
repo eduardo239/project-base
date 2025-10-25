@@ -17,7 +17,7 @@ service_account_name = "service-dev-sa-"      # ❌ Ends with hyphen
 ```terraform
 # Basic format
 service_account_name = "my-service-dev-sa"    # ✅ Good
-service_account_name = "app-dev-sa"           # ✅ Good  
+service_account_name = "app-dev-sa"           # ✅ Good
 service_account_name = "web-api-prod-sa"      # ✅ Good
 service_account_name = "github-actions-sa"    # ✅ Good
 
@@ -34,10 +34,10 @@ service_account_name = "${var.service_name}-${var.environment}-sa"
 
 ```json
 {
-  "service_name": "my-app",        // ✅ Use hyphens, not underscores
-  "service_name": "web-api",       // ✅ Good
-  "service_name": "backend-svc",   // ✅ Good
-  "service_name": "frontend",      // ✅ Good
+  "service_name": "my-app", // ✅ Use hyphens, not underscores
+  "service_name": "web-api", // ✅ Good
+  "service_name": "backend-svc", // ✅ Good
+  "service_name": "frontend" // ✅ Good
 }
 ```
 
@@ -47,7 +47,7 @@ service_account_name = "${var.service_name}-${var.environment}-sa"
 2. **Start**: Must start with lowercase letter (a-z)
 3. **End**: Must end with lowercase letter or number
 4. **Characters**: Only lowercase letters, numbers, and hyphens (-)
-5. **No**: Underscores (_), uppercase letters, or special characters
+5. **No**: Underscores (\_), uppercase letters, or special characters
 6. **Pattern**: `^[a-z](?:[-a-z0-9]{4,28}[a-z0-9])$`
 
 ## 🎯 **Recommended Pattern:**
@@ -57,8 +57,9 @@ service_account_name = "${var.service_name}-${var.environment}-sa"
 ```
 
 Examples:
+
 - `my-app-dev-sa`
-- `web-api-prod-sa` 
+- `web-api-prod-sa`
 - `auth-service-staging-sa`
 - `data-pipeline-test-sa`
 
@@ -67,7 +68,7 @@ Examples:
 ```json
 {
   "project_id": "your-gcp-project",
-  "service_name": "my-app",           // ← Change from "my_app" to "my-app"
+  "service_name": "my-app", // ← Change from "my_app" to "my-app"
   "repository_id": "docker-repo",
   "region": "us-central1"
 }
