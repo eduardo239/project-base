@@ -8,7 +8,7 @@ output "repository_url" {
   value       = module.artifact_registry.repository_url
 }
 
-output "service_account_email" {
+output "iam_service_account_email" {
   description = "Service account email"
   value       = module.iam.service_account_email
 }
