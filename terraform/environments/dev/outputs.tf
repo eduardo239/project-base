@@ -13,6 +13,7 @@ output "repository_url" {
 #   value       = module.iam.service_account_email
 # }
 
-output "cloud_run_url" {
-  value = google_cloud_run_v2_service.main.uri
+output "service_url" {
+  description = "URL of the Cloud Run service"
+  value       = module.cloud_run.service_url
 }
