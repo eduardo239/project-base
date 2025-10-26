@@ -12,3 +12,7 @@ output "repository_url" {
 #   description = "Service account email"
 #   value       = module.iam.service_account_email
 # }
+
+output "cloud_run_url" {
+  value = google_cloud_run_v2_service.main.uri
+}
