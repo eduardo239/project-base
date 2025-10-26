@@ -22,7 +22,7 @@ resource "random_id" "bucket_suffix" {
   byte_length = 4
 }
 
-
+# Create a Google Cloud Storage bucket for Terraform state
 resource "google_storage_bucket" "terraform_state" {
   name          = "terraform-state-bucket-${random_id.bucket_suffix.hex}"
   location      = "US"
