@@ -11,10 +11,6 @@ project-base/
 │ │ │ ├── main.tf
 │ │ │ ├── terraform.tfvars
 │ │ │ └── backend.tf
-│ │ ├── staging/
-│ │ │ ├── main.tf
-│ │ │ ├── terraform.tfvars
-│ │ │ └── backend.tf
 │ │ └── prod/
 │ │ ├── main.tf
 │ │ ├── terraform.tfvars
@@ -81,7 +77,6 @@ terraform apply
 # Salvar outputs importantes
 terraform output
 ```
-
 
 ### 3. Deploy via CI/CD
 
