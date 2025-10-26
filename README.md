@@ -1,3 +1,18 @@
+# Project Base - Terraform + GCP + Cloud Run
+
+A complete infrastructure-as-code project template with automated CI/CD, pre-commit hooks, and best practices for Google Cloud Platform deployment.
+
+## 🚀 Quick Start
+
+```bash
+# 1. Setup development environment (installs pre-commit hooks)
+./setup-dev-env.sh
+
+# 2. Or use Makefile for individual tasks
+make setup                    # Complete setup
+make help                    # Show all available commands
+```
+
 # Project Structure
 
 ```
@@ -8,10 +23,6 @@ project-base/
 │ └── deploy.yml # CI/CD para aplicação
 │ ├── environments/
 │ │ ├── dev/
-│ │ │ ├── main.tf
-│ │ │ ├── terraform.tfvars
-│ │ │ └── backend.tf
-│ │ ├── staging/
 │ │ │ ├── main.tf
 │ │ │ ├── terraform.tfvars
 │ │ │ └── backend.tf
@@ -48,6 +59,66 @@ project-base/
 ├── .gitignore
 ├── Dockerfile
 └── README.md
+```
+
+## 🛠️ Development Setup
+
+### Prerequisites
+
+- Python 3.7+ (for pre-commit)
+- Terraform 1.5+
+- gcloud CLI
+- Docker
+
+### 1. Setup Development Environment
+
+```bash
+# Quick setup (recommended)
+./setup-dev-env.sh
+
+# Manual setup
+pip install pre-commit
+make install-hooks
+```
+
+### 2. Pre-commit Hooks
+
+The project includes pre-commit hooks that run automatically on `git commit` and `git push`:
+
+- ✅ **terraform fmt** - Auto-format Terraform files
+- ✅ **terraform validate** - Validate Terraform syntax
+- ✅ **YAML/JSON validation** - Check syntax
+- ✅ **Trailing whitespace** - Remove extra spaces
+- ✅ **End of file** - Ensure proper line endings
+
+```bash
+# Hooks run automatically on commit
+git add .
+git commit -m "feat: add new feature"  # <- Runs terraform fmt + validate
+
+# Manual execution
+make fmt                    # Format all .tf files
+make validate              # Validate all configurations
+make check                 # Format + validate
+pre-commit run --all-files # Run all hooks manually
+
+# Skip hooks (emergency only)
+git commit --no-verify -m "emergency fix"
+```
+
+### 3. Available Make Commands
+
+```bash
+make help           # Show all available commands
+make setup          # Complete project setup
+make fmt            # Format Terraform files
+make validate       # Validate Terraform files
+make check          # Format + validate (quick check)
+make plan-dev       # Plan dev environment
+make plan-prod      # Plan prod environment
+make apply-dev      # Apply dev environment
+make apply-prod     # Apply prod environment
+make clean          # Clean Terraform cache
 ```
 
 ## Setup Instructions

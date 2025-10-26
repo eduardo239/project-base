@@ -1,7 +1,7 @@
 resource "google_artifact_registry_repository" "docker_repo" {
   repository_id = var.repository_id
-  description  = var.description
-  format       = var.format
+  description   = var.description
+  format        = var.format
 
 
   docker_config {

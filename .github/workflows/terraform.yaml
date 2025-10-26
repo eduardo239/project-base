@@ -42,8 +42,14 @@ jobs:
         run: terraform init
 
       - name: Terraform Format Check
-        working-directory: terraform/environments/${{ matrix.environment }}
-        run: terraform fmt -check
+        run: |
+          echo "Checking Terraform format across all directories..."
+          if ! terraform fmt -check -recursive .; then
+            echo "❌ Terraform files are not formatted correctly!"
+            echo "💡 Run 'make fmt' or 'terraform fmt -recursive .' to fix"
+            exit 1
+          fi
+          echo "✅ All Terraform files are properly formatted"
 
       - name: Terraform Validate
         working-directory: terraform/environments/${{ matrix.environment }}
