@@ -1,16 +1,3 @@
-# variable "create_key" {
-#   description = "Whether to create a service account key"
-#   type        = bool
-#   default     = false
-# }
-
-
-# output "service_account_key" {
-#   description = "Service account key (sensitive)"
-#   value       = var.create_key ? google_service_account_key.github_actions_key[0].private_key : null
-#   sensitive   = true
-# }
-
 terraform {
   required_version = ">= 1.5.0"
   required_providers {
@@ -18,6 +5,10 @@ terraform {
       source  = "hashicorp/google"
       version = "7.8.0"
     }
+  }
+  backend "gcs" {
+    bucket = "terraform-state-bucket-e08795ed"
+    prefix = "prod/state"
   }
 }
 
