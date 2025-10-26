@@ -66,7 +66,7 @@ jobs:
         run: terraform plan -out=tfplan
 
       - name: Upload Plan
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5.0.0
         with:
           name: tfplan-${{ matrix.environment }}
           path: terraform/environments/${{ matrix.environment }}/tfplan
