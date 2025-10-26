@@ -10,7 +10,7 @@ A complete infrastructure-as-code project template with automated CI/CD, pre-com
 
 # 2. Or use Makefile for individual tasks
 make setup                    # Complete setup
-make help                    # Show all available commands
+make help                    # Show all available commands.
 ```
 
 # Project Structure

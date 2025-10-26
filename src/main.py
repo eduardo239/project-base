@@ -1,9 +1,14 @@
-from flask import Flask, jsonify, request
+import os
+from flask import Flask, jsonify, request # type: ignore
 
 app = Flask(__name__)
 
 # Example data (in-memory, for simplicity)
 data = {"message": "Hello from Flask API!"}
+
+@app.route('/', methods=['GET'])
+def health_check():
+    return jsonify({"status": "healthy", "message": "API is running"}), 200
 
 @app.route('/api/data', methods=['GET'])
 def get_data():
@@ -18,4 +23,5 @@ def update_data():
     return jsonify({"status": "error", "message": "No message provided"}), 400
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port, debug=False)
