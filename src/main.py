@@ -6,9 +6,35 @@ app = Flask(__name__)
 # Example data (in-memory, for simplicity)
 data = {"message": "Hello from Flask API!"}
 
+lista = [{
+    "id": 1,
+    "name": "Item One"
+},
+{
+    "id": 2,
+    "name": "Item Two"
+}]
+
+
+
+
+
+
+
+
+
+
 @app.route('/', methods=['GET'])
 def health_check():
     return jsonify({"status": "healthy", "message": "API is running"}), 200
+
+def create_new():
+    new_item = {
+        "id": len(lista) + 1,
+        "name": f"Item {len(lista) + 1}"
+    }
+    lista.append(new_item)
+    return jsonify(new_item), 201
 
 @app.route('/api/data', methods=['GET'])
 def get_data():
