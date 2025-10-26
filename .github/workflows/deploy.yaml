@@ -55,7 +55,7 @@ jobs:
         working-directory: terraform/environments/${{ matrix.environment }}
         run: |
           terraform init
-          REPO_URL=$(terraform output -raw repository_url)
+          REPO_URL="us-central1-docker.pkg.dev/proj-b-475817/meu-repo"
           echo "repo_url=$REPO_URL" >> $GITHUB_OUTPUT
 
       - name: Configure Docker
