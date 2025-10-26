@@ -1,0 +1,33 @@
+# Terraform-specific ignores
+# Terraform state and lock files
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+*.tfstate.lock.info
+
+# Terraform plan files
+*.tfplan
+*.tfplan.*
+tfplan.json
+tfplan.binary
+
+# Terraform local modules and cache
+.terraform/
+.terraform.lock.hcl
+terraform.tfvars
+*.tfvars
+*.tfvars.json
+
+# Terraform crash logs
+crash.log
+crash.*.log
+
+# Local editor/IDE files (optional, but common in projects)
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS-specific files
+.DS_Store
+Thumbs.db

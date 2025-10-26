@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.9-slim-buster
+FROM python:3.11-slim
 
 # Set the working directory in the container
 WORKDIR /app
@@ -13,8 +13,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code into the container
 COPY . .
 
-# Expose the port that your Flask application will run on
-EXPOSE 5000
+# Create a non-root user for security
+RUN useradd --create-home --shell /bin/bash app
+USER app
 
-# Define the command to run your Flask application
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Expose the port that Cloud Run expects
+EXPOSE 8080
+
+# Set the PORT environment variable
+ENV PORT=8080
+
+# Define the command to run your Flask application with gunicorn
+CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app

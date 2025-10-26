@@ -79,7 +79,7 @@ jobs:
 
     strategy:
       matrix:
-        environment: [dev, prod]
+        environment: [prod]
       max-parallel: 1 # Deploy one environment at a time
 
     environment:
