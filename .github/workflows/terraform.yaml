@@ -74,7 +74,7 @@ jobs:
     strategy:
       matrix:
         environment: [dev, prod]
-      max-parallel: 1 # Deploy um ambiente por vez
+      max-parallel: 1 # Deploy one environment at a time
 
     environment:
       name: ${{ matrix.environment }}
