@@ -5,15 +5,15 @@ on:
     branches:
       - main
     paths:
-      - 'src/**'
-      - 'Dockerfile'
-      - '.github/workflows/deploy.yml'
+      - "src/**"
+      - "Dockerfile"
+      - ".github/workflows/deploy.yml"
 
 env:
   PROJECT_ID: proj-b-475817
   SERVICE_NAME: project-base
   REGION: us-central1
-  TF_VERSION: '1.6.0'
+  TF_VERSION: "1.6.0"
 
 jobs:
   deploy:

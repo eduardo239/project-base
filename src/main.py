@@ -24,6 +24,7 @@ lista = [{
 
 
 
+
 @app.route('/', methods=['GET'])
 def health_check():
     return jsonify({"status": "healthy", "message": "API is running"}), 200
