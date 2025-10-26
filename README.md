@@ -4,15 +4,6 @@ A complete infrastructure-as-code project template with automated CI/CD, pre-com
 
 ## 🚀 Quick Start
 
-```bash
-# 1. Setup development environment (installs pre-commit hooks)
-./setup-dev-env.sh
-
-# 2. Or use Makefile for individual tasks
-make setup                    # Complete setup
-make help                    # Show all available commands.
-```
-
 # Project Structure
 
 ```
