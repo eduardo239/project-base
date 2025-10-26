@@ -97,24 +97,9 @@ pre-commit run --all-files # Run all hooks manually
 git commit --no-verify -m "emergency fix"
 ```
 
-### 3. Available Make Commands
-
-```bash
-make help           # Show all available commands
-make setup          # Complete project setup
-make fmt            # Format Terraform files
-make validate       # Validate Terraform files
-make check          # Format + validate (quick check)
-make plan-dev       # Plan dev environment
-make plan-prod      # Plan prod environment
-make apply-dev      # Apply dev environment
-make apply-prod     # Apply prod environment
-make clean          # Clean Terraform cache
-```
-
 ## Setup Instructions
 
-### 1. Create Terraform State Bucket
+### 3. Create Terraform State Bucket
 
 ```bash
 # Criar bucket para estado do Terraform
@@ -128,7 +113,7 @@ cd terraform/environments/prod
 nano terraform.tfvars
 ```
 
-### 2. Initialize and Apply Terraform
+### 4. Initialize and Apply Terraform
 
 ```bash
 # Inicializar
@@ -144,7 +129,7 @@ terraform apply
 terraform output
 ```
 
-### 3. Upload Docker Image to Artifact Registry
+### 5. Upload Docker Image to Artifact Registry
 
 ```bash
 # auth
