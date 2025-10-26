@@ -1,6 +1,7 @@
 variable "project_id" {
   description = "GCP Project ID"
   type        = string
+  default     = "proj-b-475817"
 }
 
 variable "region" {
@@ -12,17 +13,19 @@ variable "region" {
 variable "environment" {
   description = "Environment name"
   type        = string
-  default     = "dev"
+  default     = "prod"
 }
 
 variable "service_name" {
   description = "Service name"
   type        = string
+  default     = "app1"
 }
 
 variable "repository_id" {
   description = "Artifact Registry repository name"
   type        = string
+  default     = "repoapp1"
 }
 
 variable "cpu_limit" {
