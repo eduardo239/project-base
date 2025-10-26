@@ -1,55 +1,74 @@
-# Dependencies
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Python-specific ignores
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
 
-# Build outputs
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+*.egg-info/
+*.egg
 dist/
 build/
-*.tgz
-*.tar.gz
+*.whl
 
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# IDE and editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# Logs
-logs/
+# Python development tools
+.coverage
+.coverage.*
+.coverports/
+htmlcov/
 *.log
-
-# Runtime data
-pids/
 *.pid
 *.seed
-*.pid.lock
+.tox/
+.nox/
+*.prof
 
-# Coverage directory used by tools like istanbul
-coverage/
-*.lcov
+# pip and package management
+pip-log.txt
+pip-delete-this-directory.txt
+Pipfile.lock
+requirements.txt.bak
 
-# Temporary folders
-tmp/
-temp/
+# Jupyter notebooks (if used)
+.ipynb_checkpoints/
 
-# Pre-commit
-.pre-commit-cache/
+# Terraform-specific ignores
+# Terraform state and lock files
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+*.tfstate.lock.info
+
+# Terraform plan files
+*.tfplan
+*.tfplan.*
+tfplan.json
+tfplan.binary
+
+# Terraform local modules and cache
+.terraform/
+.terraform.lock.hcl
+terraform.tfvars
+*.tfvars
+*.tfvars.json
+
+# Terraform crash logs
+crash.log
+crash.*.log
+
+# Local editor/IDE files (optional, but common in projects)
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS-specific files
+.DS_Store
+Thumbs.db
