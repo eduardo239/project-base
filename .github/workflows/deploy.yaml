@@ -13,6 +13,7 @@ env:
   PROJECT_ID: proj-b-475817
   SERVICE_NAME: project-base
   REGION: us-central1
+  TF_VERSION: '1.6.0'
 
 jobs:
   deploy:
@@ -29,6 +30,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3.1.2
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+          terraform_wrapper: false
+
+      - name: Verify Terraform Installation
+        run: |
+          terraform version
+          which terraform
 
       - name: Google Auth
         uses: google-github-actions/auth@v2
