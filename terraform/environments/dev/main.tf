@@ -1,5 +1,3 @@
-
-
 # Habilitar APIs necessárias
 resource "google_project_service" "required_apis" {
   for_each = toset([
