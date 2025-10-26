@@ -6,13 +6,13 @@ on:
       - main
       - dev
     paths:
-      - 'terraform/**'
+      - "terraform/**"
   pull_request:
     paths:
-      - 'terraform/**'
+      - "terraform/**"
 
 env:
-  TF_VERSION: '1.6.0'
+  TF_VERSION: "1.6.0"
 
 jobs:
   terraform-plan:
