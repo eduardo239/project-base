@@ -72,3 +72,5 @@ crash.*.log
 # OS-specific files
 .DS_Store
 Thumbs.db
+
+# end of .gitignore
