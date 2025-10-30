@@ -10,7 +10,7 @@ on:
       - ".github/workflows/deploy.yml"
 
 env:
-  PROJECT_ID: proj-b-475817
+  PROJECT_ID: app-xyz-dev
   SERVICE_NAME: project-base
   REGION: us-central1
   TF_VERSION: "1.6.0"
@@ -55,7 +55,7 @@ jobs:
         working-directory: terraform/environments/${{ matrix.environment }}
         run: |
           terraform init
-          REPO_URL="us-central1-docker.pkg.dev/proj-b-475817/meu-repo"
+          REPO_URL="us-central1-docker.pkg.dev/app-xyz-dev/meu-repo"
           echo "repo_url=$REPO_URL" >> $GITHUB_OUTPUT
 
       - name: Configure Docker

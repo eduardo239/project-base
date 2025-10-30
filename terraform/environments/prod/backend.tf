@@ -7,8 +7,8 @@ terraform {
     }
   }
   backend "gcs" {
-    bucket = "terraform-state-bucket-e08795ed"
-    prefix = "prod/state"
+    bucket = "terraform-9237123"
+    prefix = "app-xyz-dev/state"
   }
 }
 

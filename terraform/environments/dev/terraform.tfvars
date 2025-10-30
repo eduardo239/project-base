@@ -1,4 +1,4 @@
-project_id    = "proj-b-475817"
+project_id    = "app-xyz-dev"
 region        = "us-central1"
 environment   = "dev"
 service_name  = "project-base"

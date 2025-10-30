@@ -139,8 +139,8 @@ gcloud auth configure-docker us-central1-docker.pkg.dev
 docker build -t my-app:latest .
 
 # tag
-docker tag my-app:latest us-central1-docker.pkg.dev/proj-b-475817/meu-repo/app1:latest
+docker tag my-app:latest us-central1-docker.pkg.dev/app-xyz-dev/meu-repo/app1:latest
 
 # push
-docker push us-central1-docker.pkg.dev/proj-b-475817/meu-repo/app1:latest
+docker push us-central1-docker.pkg.dev/app-xyz-dev/meu-repo/app1:latest
 ```
