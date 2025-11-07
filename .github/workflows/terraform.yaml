@@ -95,10 +95,6 @@ jobs:
           terraform_version: ${{ env.TF_VERSION }}
           terraform_wrapper: false
 
-      - name: Unlock Terraform State
-        run: |
-          terraform force-unlock 1762519048605469 || echo "No lock to remove"
-
       - name: Verify Terraform Installation
         run: |
           terraform version
