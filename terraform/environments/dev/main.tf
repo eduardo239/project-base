@@ -6,11 +6,31 @@ resource "google_project_service" "required_apis" {
     "cloudbuild.googleapis.com",
     "compute.googleapis.com",
     "iam.googleapis.com",
+    "bigquery.googleapis.com",
+    "logging.googleapis.com",
+    "monitoring.googleapis.com",
+    "servicenetworking.googleapis.com",
   ])
 
   service            = each.value
   disable_on_destroy = false
 }
+
+# module "vpc" {
+#   source = "../../modules/networking/vpc"
+#   project_id   = var.project_id
+#   network_name = var.network_name
+#   depends_on = [google_project_service.required_apis]
+# }
+
+# module "subnets" {
+#   source = "../../modules/networking/subnets"
+#   project_id   = var.project_id
+#   network_name = module.vpc.network_name
+#   region       = var.region
+#   depends_on = [module.vpc]
+# }
+
 
 # # Artifact Registry
 # module "artifact_registry" {
