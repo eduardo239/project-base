@@ -22,7 +22,7 @@ jobs:
 
     strategy:
       matrix:
-        environment: [dev, prod]
+        environment: [dev]
       max-parallel: 1 # Prevent concurrent runs that could cause state locks
       fail-fast: false # Continue with other environments if one fails
 
@@ -161,7 +161,7 @@ jobs:
 
     strategy:
       matrix:
-        environment: [prod]
+        environment: [dev]
       max-parallel: 1 # Deploy one environment at a time
       fail-fast: false
 
@@ -198,11 +198,11 @@ jobs:
           name: tfplan-${{ matrix.environment }}
           path: terraform/environments/${{ matrix.environment }}
 
-      - name: Terraform Apply with Lock Handling
-        working-directory: terraform/environments/${{ matrix.environment }}
-        run: |
-          # Apply with extended lock timeout
-          terraform apply -auto-approve -lock-timeout=15m tfplan
+      # - name: Terraform Apply with Lock Handling
+      #   working-directory: terraform/environments/${{ matrix.environment }}
+      #   run: |
+      #     # Apply with extended lock timeout
+      #     terraform apply -auto-approve -lock-timeout=15m tfplan
 
       - name: Cleanup on Failure
         if: failure()
