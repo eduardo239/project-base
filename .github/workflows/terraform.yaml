@@ -12,7 +12,7 @@ on:
       - "terraform/**"
 
 env:
-  TF_VERSION: "1.6.0"
+  TF_VERSION: "1.13.5"
 
 jobs:
   terraform-plan:
@@ -116,6 +116,6 @@ jobs:
           name: tfplan-${{ matrix.environment }}
           path: terraform/environments/${{ matrix.environment }}
 
-      - name: Terraform Apply
-        working-directory: terraform/environments/${{ matrix.environment }}
-        run: terraform apply -auto-approve tfplan
+      # - name: Terraform Apply
+      #   working-directory: terraform/environments/${{ matrix.environment }}
+      #   run: terraform apply -auto-approve tfplan
