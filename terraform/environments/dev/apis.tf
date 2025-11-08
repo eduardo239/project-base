@@ -11,7 +11,6 @@ resource "google_project_service" "required_apis" {
     "monitoring.googleapis.com",
     "servicenetworking.googleapis.com",
     "sourcerepo.googleapis.com",
-    "sqladmin.googleapis.com",
     "storage-api.googleapis.com",
     "storage-component.googleapis.com",
     "cloudfunctions.googleapis.com",
