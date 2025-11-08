@@ -1,5 +1,5 @@
 module "cloud-build" {
-  source = "../../modules/ci-cd/build"
+  source = "../../modules/ci-cd/cloudbuild"
 
   github_owner = var.github_owner
   github_repo  = var.github_repo
