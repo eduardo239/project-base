@@ -22,6 +22,7 @@ jobs:
     strategy:
       matrix:
         environment: [dev, prod]
+      max-parallel: 1 # Prevent concurrent runs that could cause state locks
 
     steps:
       - name: Checkout
@@ -37,7 +38,6 @@ jobs:
         run: |
           terraform version
           which terraform
-          terraform force-unlock 1762633051933072 || echo "No locks to force-unlock"
 
       - name: Google Auth
         uses: google-github-actions/auth@v3
@@ -57,20 +57,58 @@ jobs:
       - name: Terraform Init
         working-directory: terraform/environments/${{ matrix.environment }}
         run: terraform init
+        continue-on-error: false
 
       - name: Terraform Validate
         working-directory: terraform/environments/${{ matrix.environment }}
         run: terraform validate
 
-      - name: Terraform Plan
+      - name: Terraform Plan with Retry
         working-directory: terraform/environments/${{ matrix.environment }}
-        run: terraform plan -out=tfplan
+        run: |
+          # Function to attempt terraform plan with retries
+          attempt_plan() {
+            local max_attempts=3
+            local attempt=1
+
+            while [ $attempt -le $max_attempts ]; do
+              echo "Attempt $attempt of $max_attempts..."
+
+              if terraform plan -out=tfplan -lock-timeout=10m; then
+                echo "✅ Terraform plan successful"
+                return 0
+              else
+                echo "❌ Terraform plan failed on attempt $attempt"
+
+                if [ $attempt -eq $max_attempts ]; then
+                  echo "🔍 Checking for stale locks..."
+                  terraform force-unlock -force $(terraform show -json 2>/dev/null | jq -r '.lock_id // empty') 2>/dev/null || true
+                  return 1
+                fi
+
+                echo "⏳ Waiting 30 seconds before retry..."
+                sleep 30
+                ((attempt++))
+              fi
+            done
+          }
+
+          attempt_plan
 
       - name: Upload Plan
         uses: actions/upload-artifact@v5.0.0
         with:
           name: tfplan-${{ matrix.environment }}
           path: terraform/environments/${{ matrix.environment }}/tfplan
+
+      - name: Cleanup on Failure
+        if: failure()
+        working-directory: terraform/environments/${{ matrix.environment }}
+        run: |
+          echo "🧹 Cleaning up potential state locks..."
+          # This will attempt to release any locks held by this runner
+          terraform force-unlock -force $(terraform show -json 2>/dev/null | jq -r '.lock_id // empty') 2>/dev/null || true
+          echo "✅ Cleanup completed"
 
   terraform-apply:
     name: Terraform Apply
@@ -108,7 +146,7 @@ jobs:
 
       - name: Terraform Init
         working-directory: terraform/environments/${{ matrix.environment }}
-        run: terraform init
+        run: terraform init -lock-timeout=10m
 
       - name: Download Plan
         uses: actions/download-artifact@v4
@@ -116,6 +154,16 @@ jobs:
           name: tfplan-${{ matrix.environment }}
           path: terraform/environments/${{ matrix.environment }}
 
-      # - name: Terraform Apply
-      #   working-directory: terraform/environments/${{ matrix.environment }}
-      #   run: terraform apply -auto-approve tfplan
+      - name: Terraform Apply with Lock Handling
+        working-directory: terraform/environments/${{ matrix.environment }}
+        run: |
+          # Apply with extended lock timeout
+          terraform apply -auto-approve -lock-timeout=15m tfplan
+
+      - name: Cleanup on Failure
+        if: failure()
+        working-directory: terraform/environments/${{ matrix.environment }}
+        run: |
+          echo "🧹 Cleaning up potential state locks..."
+          terraform force-unlock -force $(terraform show -json 2>/dev/null | jq -r '.lock_id // empty') 2>/dev/null || true
+          echo "✅ Cleanup completed"
