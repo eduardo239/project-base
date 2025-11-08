@@ -16,6 +16,7 @@ variable "environment" {
   default     = "dev"
 }
 
+# Application-specific variables
 variable "service_name" {
   description = "Service name"
   type        = string
@@ -64,6 +65,7 @@ variable "allow_unauthenticated" {
   default     = true
 }
 
+# VPC Network
 variable "network_name" {
   description = "The name of the VPC network"
   type        = string
