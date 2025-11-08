@@ -63,7 +63,7 @@ jobs:
 
       - name: Terraform Validate
         working-directory: terraform/environments/${{ matrix.environment }}
-        run: terraform validate && terraform force-unlock -force 1762635625528616
+        run: terraform validate
 
       - name: Terraform Plan with Retry
         working-directory: terraform/environments/${{ matrix.environment }}
