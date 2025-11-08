@@ -16,3 +16,7 @@ environment_variables = {
 }
 
 allow_unauthenticated = true
+
+github_owner = "eduardo239"
+github_repo  = "github-repo"
+repo_name    = "source-repo"
