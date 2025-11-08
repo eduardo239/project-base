@@ -63,37 +63,41 @@ jobs:
         working-directory: terraform/environments/${{ matrix.environment }}
         run: terraform validate
 
-      - name: Terraform Plan with Retry
+      - name: Terraform Plan
         working-directory: terraform/environments/${{ matrix.environment }}
-        run: |
-          # Function to attempt terraform plan with retries
-          attempt_plan() {
-            local max_attempts=3
-            local attempt=1
+        run: terraform plan -out=tfplan -lock-timeout=10m
 
-            while [ $attempt -le $max_attempts ]; do
-              echo "Attempt $attempt of $max_attempts..."
+      # - name: Terraform Plan with Retry
+      #   working-directory: terraform/environments/${{ matrix.environment }}
+      #   run: |
+      #     # Function to attempt terraform plan with retries
+      #     attempt_plan() {
+      #       local max_attempts=3
+      #       local attempt=1
 
-              if terraform plan -out=tfplan -lock-timeout=10m; then
-                echo "✅ Terraform plan successful"
-                return 0
-              else
-                echo "❌ Terraform plan failed on attempt $attempt"
+      #       while [ $attempt -le $max_attempts ]; do
+      #         echo "Attempt $attempt of $max_attempts..."
 
-                if [ $attempt -eq $max_attempts ]; then
-                  echo "🔍 Checking for stale locks..."
-                  terraform force-unlock -force $(terraform show -json 2>/dev/null | jq -r '.lock_id // empty') 2>/dev/null || true
-                  return 1
-                fi
+      #         if terraform plan -out=tfplan -lock-timeout=10m; then
+      #           echo "✅ Terraform plan successful"
+      #           return 0
+      #         else
+      #           echo "❌ Terraform plan failed on attempt $attempt"
 
-                echo "⏳ Waiting 30 seconds before retry..."
-                sleep 30
-                ((attempt++))
-              fi
-            done
-          }
+      #           if [ $attempt -eq $max_attempts ]; then
+      #             echo "🔍 Checking for stale locks..."
+      #             terraform force-unlock -force $(terraform show -json 2>/dev/null | jq -r '.lock_id // empty') 2>/dev/null || true
+      #             return 1
+      #           fi
 
-          attempt_plan
+      #           echo "⏳ Waiting 30 seconds before retry..."
+      #           sleep 30
+      #           ((attempt++))
+      #         fi
+      #       done
+      #     }
+
+      #     attempt_plan
 
       - name: Upload Plan
         uses: actions/upload-artifact@v5.0.0
