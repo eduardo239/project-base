@@ -37,7 +37,6 @@ jobs:
         run: |
           terraform version
           which terraform
-          terraform force-unlock 1762519048605469
 
       - name: Google Auth
         uses: google-github-actions/auth@v3
