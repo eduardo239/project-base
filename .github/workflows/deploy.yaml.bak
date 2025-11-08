@@ -5,7 +5,7 @@
 #     branches:
 #       - main
 #     paths:
-#       - "src/**"
+#       - "terraform/environments/dev/python-and-docker/**"
 #       - "Dockerfile"
 #       - ".github/workflows/deploy.yml"
 

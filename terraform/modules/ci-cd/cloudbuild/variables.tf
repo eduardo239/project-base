@@ -8,11 +8,6 @@ variable "github_repo" {
   type        = string
 }
 
-variable "repo_name" {
-  description = "Google Source Repository name"
-  type        = string
-}
-
 variable "project_id" {
   description = "GCP Project ID"
   type        = string

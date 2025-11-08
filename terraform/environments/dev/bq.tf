@@ -31,7 +31,7 @@
 #     {
 #       table_id    = "users"
 #       description = "Tabela de usuários"
-#       schema      = file("${path.module}/schemas/users_schema.json")
+#       schema      = file("${path.module}/bq-schemas/users_schema.json")
 #       time_partitioning = {
 #         type  = "DAY"
 #         field = "created_at"
@@ -44,7 +44,7 @@
 #     {
 #       table_id    = "events"
 #       description = "Tabela de eventos"
-#       schema      = file("${path.module}/schemas/events_schema.json")
+#       schema      = file("${path.module}/bq-schemas/events_schema.json")
 #       time_partitioning = {
 #         type  = "DAY"
 #         field = "event_timestamp"
