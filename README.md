@@ -144,3 +144,81 @@ docker tag my-app:latest us-central1-docker.pkg.dev/app-xyz-dev/meu-repo/app1:la
 # push
 docker push us-central1-docker.pkg.dev/app-xyz-dev/meu-repo/app1:latest
 ```
+
+## 🔧 Troubleshooting
+
+### Terraform State Lock Issues
+
+If your CI/CD pipeline gets stuck on "Acquiring state lock", use these commands:
+
+```bash
+# Check for existing locks
+make unlock-dev     # For dev environment
+make unlock-prod    # For prod environment
+
+# Or use the script directly
+./scripts/terraform-unlock.sh dev force
+./scripts/terraform-unlock.sh prod force
+```
+
+### Common CI/CD Issues
+
+1. **Pipeline stuck on terraform plan:**
+
+   - Check if there are concurrent runs
+   - State lock timeout - wait or force unlock
+   - GCP authentication issues
+
+2. **State lock conflicts:**
+
+   - Each environment now uses separate state files
+   - dev: `gs://terraform-9237123/app-xyz-dev/state`
+   - prod: `gs://terraform-9237123/app-xyz-prod/state`
+
+3. **Authentication failures:**
+   - Verify `GCP_SA_KEY` secret in GitHub
+   - Check service account permissions
+
+### Useful Commands
+
+```bash
+# Format and validate
+make fmt validate
+
+# Plan for specific environment
+make plan-dev
+make plan-prod
+
+# Apply with confirmation
+make apply-dev
+make apply-prod
+
+# Clean up temporary files
+make clean
+
+# Show help
+make help
+```
+
+### Manual Terraform Operations
+
+```bash
+# Go to environment directory
+cd terraform/environments/dev  # or prod
+
+# Standard workflow
+terraform init
+terraform plan -out=tfplan
+terraform apply tfplan
+
+# Force unlock if stuck
+terraform force-unlock LOCK_ID
+
+# Check state
+terraform show
+terraform state list
+```
+
+````
+```
+````
