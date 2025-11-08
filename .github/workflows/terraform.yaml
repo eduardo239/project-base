@@ -198,11 +198,11 @@ jobs:
           name: tfplan-${{ matrix.environment }}
           path: terraform/environments/${{ matrix.environment }}
 
-      # - name: Terraform Apply with Lock Handling
-      #   working-directory: terraform/environments/${{ matrix.environment }}
-      #   run: |
-      #     # Apply with extended lock timeout
-      #     terraform apply -auto-approve -lock-timeout=15m tfplan
+      - name: Terraform Apply with Lock Handling
+        working-directory: terraform/environments/${{ matrix.environment }}
+        run: |
+          # Apply with extended lock timeout
+          terraform apply -auto-approve -lock-timeout=15m tfplan
 
       - name: Cleanup on Failure
         if: failure()
