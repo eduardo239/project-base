@@ -1,6 +1,6 @@
-module "firestore" {
-  source     = "../../modules/storage/firestore"
-  project_id = var.project_id
+# module "firestore" {
+#   source     = "../../modules/storage/firestore"
+#   project_id = var.project_id
 
-  depends_on = [google_project_service.required_apis]
-}
+#   depends_on = [google_project_service.required_apis]
+# }
