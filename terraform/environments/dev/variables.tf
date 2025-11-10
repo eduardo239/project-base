@@ -84,3 +84,10 @@ variable "github_repo" {
   type        = string
   default     = "project-base"
 }
+
+# filestore
+variable "location" {
+  description = "Filestore location"
+  type        = string
+  default     = "us-central1-a"
+}

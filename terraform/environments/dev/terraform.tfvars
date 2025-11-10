@@ -1,5 +1,6 @@
 project_id    = "app-xyz-dev"
 region        = "us-central1"
+location      = "us-central1-a"
 environment   = "dev"
 service_name  = "project-base"
 repository_id = "meu-repo"
