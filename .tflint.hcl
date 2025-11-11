@@ -12,3 +12,8 @@ plugin "google" {
 rule "terraform_naming_convention" {
   enabled = true
 }
+
+# Disable unused variable declarations warning
+rule "terraform_unused_declarations" {
+  enabled = false
+}

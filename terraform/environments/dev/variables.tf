@@ -10,104 +10,28 @@ variable "region" {
   default     = "us-central1"
 }
 
-variable "environment" {
-  description = "Environment name"
-  type        = string
-  default     = "dev"
-}
+# Removed unused variables - can be re-added when needed
+# variable "environment" { ... }
+# variable "service_name" { ... }
+# variable "repository_id" { ... }
 
-# Application-specific variables
-variable "service_name" {
-  description = "Service name"
-  type        = string
-  default     = "app1"
-}
+# Cloud Run variables - currently unused but available for future use
+# variable "cpu_limit" { ... }
+# variable "memory_limit" { ... }
+# variable "min_instances" { ... }
+# variable "max_instances" { ... }
+# variable "environment_variables" { ... }
+# variable "allow_unauthenticated" { ... }
 
-variable "repository_id" {
-  description = "Artifact Registry repository name"
-  type        = string
-  default     = "repoapp1"
-}
+# Network and CI/CD variables - currently unused
+# variable "network_name" { ... }
+# variable "github_owner" { ... }
+# variable "github_repo" { ... }
 
-variable "cpu_limit" {
-  description = "CPU limit"
-  type        = string
-  default     = "1"
-}
+# Storage and messaging variables - currently unused
+# variable "location" { ... }
+# variable "topic_name" { ... }
+# variable "subscription_name" { ... }
 
-variable "memory_limit" {
-  description = "Memory limit"
-  type        = string
-  default     = "512Mi"
-}
-
-variable "min_instances" {
-  description = "Minimum instances"
-  type        = number
-  default     = 1
-}
-
-variable "max_instances" {
-  description = "Maximum instances"
-  type        = number
-  default     = 2
-}
-
-variable "environment_variables" {
-  description = "Environment variables"
-  type        = map(string)
-  default     = {}
-}
-
-variable "allow_unauthenticated" {
-  description = "Allow unauthenticated access"
-  type        = bool
-  default     = true
-}
-
-# VPC Network
-variable "network_name" {
-  description = "The name of the VPC network"
-  type        = string
-  default     = "vpc-network-dev"
-}
-
-## ci-cd build
-variable "github_owner" {
-  description = "GitHub repository owner"
-  type        = string
-  default     = "eduardo239"
-}
-
-variable "github_repo" {
-  description = "GitHub repository name"
-  type        = string
-  default     = "project-base"
-}
-
-# filestore
-variable "location" {
-  description = "Filestore location"
-  type        = string
-  default     = "us-central1-a"
-}
-
-# pub-sub
-variable "topic_name" {
-  description = "The name of the Pub/Sub topic."
-  type        = string
-  default     = "dev-topic"
-}
-
-variable "message_retention_duration" {
-  description = "The amount of time to retain messages in the topic."
-  type        = string
-  default     = "604800s" # 7 days
-}
-
-
-variable "subscription_name" {
-  description = "The name of the Pub/Sub subscription."
-  type        = string
-  default     = "dev-subscription"
-}
+# Keep this one as it might be used
+# variable "message_retention_duration" {}

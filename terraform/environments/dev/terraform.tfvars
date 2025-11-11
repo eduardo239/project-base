@@ -1,22 +1,22 @@
-project_id    = "app-xyz-dev"
-region        = "us-central1"
-location      = "us-central1-a"
-environment   = "dev"
-service_name  = "project-base"
-repository_id = "meu-repo"
+project_id = "app-xyz-dev"
+region     = "us-central1"
+# location      = "us-central1-a"
+# environment   = "dev"
+# service_name  = "project-base"
+# repository_id = "meu-repo"
 
-cpu_limit    = "2"
-memory_limit = "1Gi"
+# cpu_limit    = "2"
+# memory_limit = "1Gi"
 
-min_instances = 1
-max_instances = 100
+# min_instances = 1
+# max_instances = 100
 
-environment_variables = {
-  ENV       = "development"
-  LOG_LEVEL = "info"
-}
+# environment_variables = {
+#   ENV       = "development"
+#   LOG_LEVEL = "info"
+# }
 
-allow_unauthenticated = true
+# allow_unauthenticated = true
 
-github_owner = "eduardo239"
-github_repo  = "project-base"
+# github_owner = "eduardo239"
+# github_repo  = "project-base"
