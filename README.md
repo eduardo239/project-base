@@ -219,6 +219,21 @@ terraform show
 terraform state list
 ```
 
-````
-```
-````
+### Workflows
+
+📋 Terraform Infrastructure Workflow
+├── 🎯 Triggers: Mudanças específicas em arquivos Terraform
+├── 🔧 Terraform Plan Job
+│ ├── ✅ Checkout & Setup
+│ ├── 🔐 Autenticação GCP
+│ ├── 📋 Verificação de Formato
+│ ├── 🔍 Security Pre-Check
+│ ├── ⚡ Plan com Retry Logic
+│ ├── 📊 Análise de Mudanças Destrutivas
+│ └── 🧹 Cleanup Inteligente
+└── 🚀 Terraform Apply Job
+. ├── 🎯 Gate de Ambiente (dev/prod)
+. ├── 🔍 Security Check Final
+. ├── 🚀 Apply Condicional
+. ├── ✅ Verificação Pós-Deploy
+. └── 🧹 Cleanup em Falhas
