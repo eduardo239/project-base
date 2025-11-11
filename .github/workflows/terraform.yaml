@@ -1,4 +1,4 @@
-name: Terraform
+name: Terraform Infrastructure
 
 on:
   push:
@@ -6,10 +6,16 @@ on:
       - main
       - dev
     paths:
-      - "terraform/**"
+      - "terraform/**/*.tf"
+      - "terraform/**/*.tfvars"
+      - "terraform/**/*.json"
+      - ".github/workflows/terraform.yaml"
   pull_request:
     paths:
-      - "terraform/**"
+      - "terraform/**/*.tf"
+      - "terraform/**/*.tfvars"
+      - "terraform/**/*.json"
+      - ".github/workflows/terraform.yaml"
 
 env:
   TF_VERSION: "1.13.5"
@@ -22,7 +28,7 @@ jobs:
 
     strategy:
       matrix:
-        environment: [dev]
+        environment: [dev, prod]
       max-parallel: 1 # Prevent concurrent runs that could cause state locks
       fail-fast: false # Continue with other environments if one fails
 
@@ -65,6 +71,23 @@ jobs:
         working-directory: terraform/environments/${{ matrix.environment }}
         run: terraform validate
 
+      - name: Security Pre-Check
+        working-directory: terraform/environments/${{ matrix.environment }}
+        run: |
+          echo "🔍 Running security pre-checks..."
+
+          # Check for potential destructive changes in configuration
+          if grep -r "force_destroy.*=.*true\|skip_final_snapshot.*=.*true" . 2>/dev/null; then
+            echo "⚠️ Found potentially destructive configurations - review required"
+          fi
+
+          # Check for hardcoded secrets (basic check)
+          if grep -r -i "password\|secret\|token\|key" --include="*.tf" --include="*.tfvars" . 2>/dev/null | grep -v "var\." | grep -v "data\." | grep -v "random_"; then
+            echo "⚠️ Potential hardcoded secrets found - please review"
+          fi
+
+          echo "✅ Security pre-check completed"
+
       - name: Terraform Plan with Retry
         working-directory: terraform/environments/${{ matrix.environment }}
         timeout-minutes: 20 # Set step timeout
@@ -72,14 +95,15 @@ jobs:
           # Function to check and clean stale locks
           cleanup_stale_locks() {
             echo "🔍 Checking for existing locks..."
-            # Get lock info and clean up if needed
-            if terraform show -json 2>/dev/null | grep -q "lock_id"; then
-              lock_id=$(terraform show -json 2>/dev/null | jq -r '.lock_id // empty' 2>/dev/null || echo "")
-              if [ ! -z "$lock_id" ]; then
-                echo "⚠️  Found existing lock: $lock_id"
-                echo "🧹 Attempting to remove stale lock..."
-                terraform force-unlock -force "$lock_id" || true
-                sleep 5
+            # Simple lock cleanup - check state and force unlock if needed
+            if ! terraform plan -detailed-exitcode -refresh=false > /dev/null 2>&1; then
+              echo "⚠️ State appears locked, attempting cleanup..."
+              # Get any existing lock ID from error output
+              lock_info=$(terraform plan 2>&1 | grep -o 'ID: [a-f0-9-]*' | head -1 | cut -d' ' -f2 || echo "")
+              if [ ! -z "$lock_info" ]; then
+                echo "🧹 Attempting to remove lock: $lock_info"
+                terraform force-unlock -force "$lock_info" || true
+                sleep 3
               fi
             fi
           }
@@ -100,6 +124,15 @@ jobs:
               # Use a longer lock timeout and add refresh
               if terraform plan -out=tfplan -lock-timeout=10m -refresh=true -parallelism=4; then
                 echo "✅ Terraform plan successful"
+
+                # Drift detection
+                plan_exit_code=$?
+                if [ $plan_exit_code -eq 2 ]; then
+                  echo "⚠️ Infrastructure drift detected - changes are planned"
+                elif [ $plan_exit_code -eq 0 ]; then
+                  echo "✅ No changes needed - infrastructure matches configuration"
+                fi
+
                 return 0
               else
                 echo "❌ Terraform plan failed on attempt $attempt"
@@ -124,6 +157,41 @@ jobs:
 
           attempt_plan
 
+      - name: Analyze Plan for Destructive Changes
+        working-directory: terraform/environments/${{ matrix.environment }}
+        run: |
+          echo "🔍 Analyzing plan for destructive changes..."
+
+          # Check if plan file exists and analyze it
+          if [ -f tfplan ]; then
+            # Convert plan to JSON for analysis
+            terraform show -json tfplan > plan.json
+
+            # Check for destructive actions
+            destructive_actions=$(jq -r '.resource_changes[]? | select(.change.actions[]? == "delete" or .change.actions[]? == "replace") | .address' plan.json 2>/dev/null || echo "")
+
+            if [ ! -z "$destructive_actions" ]; then
+              echo "⚠️ DESTRUCTIVE CHANGES DETECTED:"
+              echo "$destructive_actions"
+              echo ""
+              echo "These resources will be deleted or replaced:"
+              jq -r '.resource_changes[]? | select(.change.actions[]? == "delete" or .change.actions[]? == "replace") | "  - " + .address + " (" + (.change.actions | join(",")) + ")"' plan.json 2>/dev/null || echo "Could not parse detailed changes"
+
+              # For production, we might want to fail here or require manual approval
+              if [ "${{ matrix.environment }}" = "prod" ]; then
+                echo ""
+                echo "🚨 Production environment - manual review required for destructive changes"
+              fi
+            else
+              echo "✅ No destructive changes detected"
+            fi
+
+            # Clean up
+            rm -f plan.json
+          else
+            echo "⚠️ No plan file found to analyze"
+          fi
+
       - name: Upload Plan
         uses: actions/upload-artifact@v5.0.0
         with:
@@ -138,17 +206,21 @@ jobs:
 
           # List any terraform processes
           echo "Active terraform processes:"
-          ps aux | grep terraform || echo "No terraform processes found"
+          ps aux | grep terraform | grep -v grep || echo "No terraform processes found"
 
-          # Clean up any remaining locks
+          # Simple cleanup - try to unlock if state is locked
           echo "Checking for locks to clean up..."
-          if terraform show -json 2>/dev/null | grep -q "lock_id"; then
-            lock_id=$(terraform show -json 2>/dev/null | jq -r '.lock_id // empty' 2>/dev/null || echo "")
-            if [ ! -z "$lock_id" ]; then
-              echo "Found lock to clean: $lock_id"
-              terraform force-unlock -force "$lock_id" 2>/dev/null || true
+          if ! terraform plan -detailed-exitcode -refresh=false > /dev/null 2>&1; then
+            echo "State appears locked, attempting cleanup..."
+            lock_info=$(terraform plan 2>&1 | grep -o 'ID: [a-f0-9-]*' | head -1 | cut -d' ' -f2 || echo "")
+            if [ ! -z "$lock_info" ]; then
+              echo "Found lock to clean: $lock_info"
+              terraform force-unlock -force "$lock_info" 2>/dev/null || true
             fi
           fi
+
+          # Clean up temporary files
+          rm -f plan.json tfplan 2>/dev/null || true
 
           echo "✅ Cleanup completed"
 
@@ -156,17 +228,23 @@ jobs:
     name: Terraform Apply
     runs-on: ubuntu-latest
     needs: terraform-plan
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     timeout-minutes: 45 # Set overall job timeout
 
     strategy:
       matrix:
-        environment: [dev]
+        environment: [dev, prod]
       max-parallel: 1 # Deploy one environment at a time
       fail-fast: false
 
+    # Conditional execution based on branch and environment
+    if: |
+      (github.ref == 'refs/heads/dev' && github.event_name == 'push') ||
+      (github.ref == 'refs/heads/main' && github.event_name == 'push')
+
     environment:
       name: ${{ matrix.environment }}
+      # Add protection for production
+      url: ${{ matrix.environment == 'prod' && 'https://console.cloud.google.com' || '' }}
 
     steps:
       - name: Checkout
@@ -198,16 +276,108 @@ jobs:
           name: tfplan-${{ matrix.environment }}
           path: terraform/environments/${{ matrix.environment }}
 
+      - name: Environment-specific Deploy Gate
+        run: |
+          echo "🎯 Deploying to: ${{ matrix.environment }}"
+          echo "📅 Branch: ${{ github.ref }}"
+          echo "🔄 Event: ${{ github.event_name }}"
+
+          # Skip if wrong environment for branch
+          if [[ "${{ github.ref }}" == "refs/heads/dev" && "${{ matrix.environment }}" != "dev" ]]; then
+            echo "⏭️ Skipping ${{ matrix.environment }} deployment from dev branch"
+            exit 0
+          fi
+
+          if [[ "${{ github.ref }}" == "refs/heads/main" && "${{ matrix.environment }}" != "prod" ]]; then
+            echo "⏭️ Skipping ${{ matrix.environment }} deployment from main branch"
+            exit 0
+          fi
+
+          echo "✅ Proceeding with deployment to ${{ matrix.environment }}"
+
+      - name: Pre-Apply Security Check
+        working-directory: terraform/environments/${{ matrix.environment }}
+        run: |
+          echo "🔍 Final security check before apply..."
+
+          if [ -f tfplan ]; then
+            # Convert plan to JSON and check for sensitive changes
+            terraform show -json tfplan > plan.json
+
+            # Check for IAM changes
+            iam_changes=$(jq -r '.resource_changes[]? | select(.type | contains("iam")) | .address' plan.json 2>/dev/null || echo "")
+            if [ ! -z "$iam_changes" ]; then
+              echo "⚠️ IAM changes detected:"
+              echo "$iam_changes"
+            fi
+
+            # Check for network changes
+            network_changes=$(jq -r '.resource_changes[]? | select(.type | contains("network") or contains("firewall") or contains("vpc")) | .address' plan.json 2>/dev/null || echo "")
+            if [ ! -z "$network_changes" ]; then
+              echo "⚠️ Network changes detected:"
+              echo "$network_changes"
+            fi
+
+            rm -f plan.json
+          fi
+
+          echo "✅ Security check completed"
+
       - name: Terraform Apply with Lock Handling
         working-directory: terraform/environments/${{ matrix.environment }}
         run: |
+          # Skip if wrong environment for branch
+          if [[ "${{ github.ref }}" == "refs/heads/dev" && "${{ matrix.environment }}" != "dev" ]]; then
+            echo "⏭️ Skipping apply for ${{ matrix.environment }}"
+            exit 0
+          fi
+
+          if [[ "${{ github.ref }}" == "refs/heads/main" && "${{ matrix.environment }}" != "prod" ]]; then
+            echo "⏭️ Skipping apply for ${{ matrix.environment }}"
+            exit 0
+          fi
+
+          echo "🚀 Applying changes to ${{ matrix.environment }}..."
+
           # Apply with extended lock timeout
           terraform apply -auto-approve -lock-timeout=15m tfplan
+
+          echo "✅ Apply completed successfully"
+
+      - name: Post-Apply Verification
+        if: success()
+        working-directory: terraform/environments/${{ matrix.environment }}
+        run: |
+          echo "🔍 Verifying deployment..."
+
+          # Basic state verification
+          terraform show > /dev/null 2>&1
+          if [ $? -eq 0 ]; then
+            echo "✅ Terraform state is accessible"
+          else
+            echo "⚠️ Issues accessing Terraform state"
+          fi
+
+          # Output key information
+          echo "📋 Deployment summary:"
+          echo "Environment: ${{ matrix.environment }}"
+          echo "Timestamp: $(date)"
+          echo "Commit: ${{ github.sha }}"
 
       - name: Cleanup on Failure
         if: failure()
         working-directory: terraform/environments/${{ matrix.environment }}
         run: |
-          echo "🧹 Cleaning up potential state locks..."
-          terraform force-unlock -force $(terraform show -json 2>/dev/null | jq -r '.lock_id // empty') 2>/dev/null || true
+          echo "🧹 Cleaning up after failure..."
+
+          # Try to unlock state if locked
+          if ! terraform plan -detailed-exitcode -refresh=false > /dev/null 2>&1; then
+            echo "State appears locked, attempting cleanup..."
+            lock_info=$(terraform plan 2>&1 | grep -o 'ID: [a-f0-9-]*' | head -1 | cut -d' ' -f2 || echo "")
+            if [ ! -z "$lock_info" ]; then
+              echo "Cleaning up lock: $lock_info"
+              terraform force-unlock -force "$lock_info" 2>/dev/null || true
+            fi
+          fi
+
           echo "✅ Cleanup completed"

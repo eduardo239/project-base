@@ -5,26 +5,53 @@ on:
     branches:
       - destroy
 
+env:
+  TF_VERSION: "1.13.5"
+
 jobs:
   destroy:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    strategy:
+      matrix:
+        environment: [dev]
+      max-parallel: 1
+      fail-fast: false
+
+    environment:
+      name: destroy-${{ matrix.environment }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v3.1.2
         with:
-          terraform_version: latest
+          terraform_version: ${{ env.TF_VERSION }}
+          terraform_wrapper: false
+
+      - name: Google Auth
+        uses: google-github-actions/auth@v3
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       - name: Terraform Init
-        run: terraform init
+        working-directory: terraform/environments/${{ matrix.environment }}
+        run: terraform init -lock-timeout=10m
 
       - name: Terraform Plan Destroy
+        working-directory: terraform/environments/${{ matrix.environment }}
         run: terraform plan -destroy -out=destroy.tfplan
 
       - name: Terraform Destroy
+        working-directory: terraform/environments/${{ matrix.environment }}
         run: terraform apply destroy.tfplan
-        env:
-          TF_VAR_confirm_destroy: true
+
+      - name: Cleanup on Failure
+        if: failure()
+        working-directory: terraform/environments/${{ matrix.environment }}
+        run: |
+          echo "🧹 Cleaning up potential state locks..."
+          terraform force-unlock -force $(terraform show -json 2>/dev/null | jq -r '.lock_id // empty') 2>/dev/null || true
