@@ -91,3 +91,23 @@ variable "location" {
   type        = string
   default     = "us-central1-a"
 }
+
+# pub-sub
+variable "topic_name" {
+  description = "The name of the Pub/Sub topic."
+  type        = string
+  default = "dev-topic"
+}
+
+variable "message_retention_duration" {
+  description = "The amount of time to retain messages in the topic."
+  type        = string
+  default     = "604800s" # 7 days
+}
+
+
+variable "subscription_name" {
+  description = "The name of the Pub/Sub subscription."
+  type        = string
+  default     = "dev-subscription"
+}
