@@ -96,7 +96,7 @@ variable "location" {
 variable "topic_name" {
   description = "The name of the Pub/Sub topic."
   type        = string
-  default = "dev-topic"
+  default     = "dev-topic"
 }
 
 variable "message_retention_duration" {
