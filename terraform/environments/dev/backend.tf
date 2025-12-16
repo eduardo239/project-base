@@ -8,7 +8,7 @@ terraform {
   }
   backend "gcs" {
     bucket = "terraform-state-0000000"
-    prefix = "app-lastbit-dev/state"
+    prefix = "terraform/state/project-base"
   }
 }
 
