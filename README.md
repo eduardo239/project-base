@@ -38,9 +38,6 @@ project-base/
 │ │ ├── main.tf
 │ │ ├── variables.tf
 │ │ └── outputs.tf
-│ └── global/
-│ ├── main.tf # Recursos globais (projeto, APIs)
-│ └── backend.tf
 ├── src/
 │   ├── main.py
 │   └── requirements.txt

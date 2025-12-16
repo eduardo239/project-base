@@ -1,4 +1,4 @@
-project_id = "app-xyz-dev"
+project_id = "app-lastbit-dev"
 region     = "us-central1"
 # location      = "us-central1-a"
 # environment   = "dev"

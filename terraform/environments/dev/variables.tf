@@ -1,13 +1,13 @@
 variable "project_id" {
   description = "GCP Project ID"
   type        = string
-  default     = "app-xyz-dev"
+
 }
 
 variable "region" {
   description = "GCP region"
   type        = string
-  default     = "us-central1"
+
 }
 
 # Removed unused variables - can be re-added when needed
